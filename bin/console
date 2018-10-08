@@ -41,5 +41,5 @@ class FooOrchestra
   compose :second, klass: FooService, baz: 5
 end
 
-require "pry"
+require 'pry'
 Pry.start(__FILE__)

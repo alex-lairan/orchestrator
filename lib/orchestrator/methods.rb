@@ -5,7 +5,7 @@ module Orchestrator
   module Methods
     include Dry::Monads::Result::Mixin
 
-    def initialize(steps: (self.class.steps))
+    def initialize(steps: self.class.steps)
       @stack = Stack.new(steps)
     end
 

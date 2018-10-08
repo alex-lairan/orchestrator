@@ -6,9 +6,9 @@ module Orchestrator
       include Dry::Monads::Result::Mixin
 
       def call(args, &block)
-        block ||= ->{}
+        block ||= -> {}
 
-        block.(*args, &block)
+        block.call(*args, &block)
       end
     end
 

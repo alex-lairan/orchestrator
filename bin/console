@@ -1,14 +1,45 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "orchestrator"
+require 'bundler/setup'
+require 'orchestrator'
 
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
+class FooService
+  include Orchestrator.layer
 
-# (If you use this, don't forget to add pry to your Gemfile!)
-# require "pry"
-# Pry.start
+  attribute :bar
+  attribute :baz
 
-require "irb"
-IRB.start(__FILE__)
+  def perform(input)
+    puts 'I am in the service !'
+    p input
+
+    Success(input.merge(bar: 5))
+  end
+end
+
+class Fail
+  include Dry::Monads::Result::Mixin
+
+  def initialize(opts)
+    @opts = opts
+  end
+
+  def perform(input)
+    puts 'I am in the service !'
+    p input
+    p @opts
+
+    Failure(@opts)
+  end
+end
+
+class FooOrchestra
+  include Orchestrator.composer
+
+  # compose :failer, Fail, bar: 5
+  compose :first, klass: FooService, bar: 5
+  compose :second, klass: FooService, baz: 5
+end
+
+require "pry"
+Pry.start(__FILE__)

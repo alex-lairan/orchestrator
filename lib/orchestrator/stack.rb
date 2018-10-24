@@ -13,7 +13,7 @@ module Orchestrator
         data = monad.value!.merge!(previous.value!)
         previous = caller.call(data, options)
 
-        break unless previous.success?
+        return previous if previous.failure?
       end
 
       monad
